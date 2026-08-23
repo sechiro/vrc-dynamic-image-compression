@@ -3,7 +3,7 @@
 作成日: 2026-08-22
 状態: デモ動作確認済み（Windows Editor / ClientSim）。VRChat Build & Testは未実施。
 
-`VRCImageDownloader`で取得したポスター画像を[DR Runtime Compressed Image Downloader](../README.md)でGPU圧縮し、壁の掲示板（Quad）へ表示するギミック。Windowsではalphaなし画像がBC1（4 bpp）になり、RGB24比16.7%のVRAMで掲示できる。
+`VRCImageDownloader`で取得したポスター画像を[VRC Dynamic Image Compression](../README.md)でGPU圧縮し、壁の掲示板（Quad）へ表示するギミック。Windowsではalphaなし画像がBC1（4 bpp）になり、RGB24比16.7%のVRAMで掲示できる。
 
 ## ポスターのパターン（縦長）
 
@@ -172,7 +172,7 @@ Manager: loaded=2 failed=0
 - ポスターの差し替えはURLを変えて `BeginLoad()`（1枚）または `ReloadAll()`（全枚）。
 - mipmapは生成しない（Facadeの制約）。遠距離ではエイリアシングが出る。
 - **配信ホストはVRChatの画像読み込み許可ドメインにする。** 公式doc（[Image Loading](https://creators.vrchat.com/worlds/udon/image-loading/)）の許可リストは `*.disbridge.com`、`dl.dropbox.com` / `dl.dropboxusercontent.com`、`*.github.io`、`images4.imagebam.com`、`i.ibb.co`、`images2.imgbox.com`、`i.imgur.com`、`i.postimg.cc`、`i.redd.it`、`pbs.twimg.com`、`*.vrcdn.cloud`、`assets.vrchat.com`、`i.ytimg.com` の13件（2026-08-23時点）。**Discord CDN（`cdn.discordapp.com` / `media.discordapp.net`）と `raw.githubusercontent.com` は含まれない。** リスト外はclientの「Allow Untrusted URLs」が有効なときだけ読み込まれ、無効なclientではerror callbackも来ずにdownloadが始まらない（Facadeは `Download Timeout Seconds`（既定45秒）で `DownloadTimeout` にする）。
-- ClientSimの `VRCImageDownloader` はHTTP redirectを追わないため、redirectしない直URLを使う。公開版のデモSceneでは `Poster Url` を空にしてある。許可ドメイン上の1448 x 2048 PNGを設定する（Large / Smallとも同じURLでよい。Smallはギミック側で1/2に縮小される）。
+- ClientSimの `VRCImageDownloader` はHTTP redirectを追わないため、redirectしない直URLを使う。デモSceneの `Poster Url` にはサンプル画像 `https://sechiro.github.io/vrc-posters/posters/hatago_1448x2048.png`（GitHub Pages、1448 x 2048 RGB PNG）を設定してある。Large / Smallとも同じURLで、Smallはギミック側で1/2に縮小される。差し替える場合は許可ドメイン上の画像を指定する。
 - Facadeのhandle poolは4個。掲示板は成功後もhandleを保持する（Textureの所有者）ので、同時に掲示できるのは4枚まで。5枚以上は `DRCompressedImageDownloader.prefab` のRequest Handleを増やすか、Managerを分ける。
 
 ## 動作確認

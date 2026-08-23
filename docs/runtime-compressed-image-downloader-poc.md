@@ -1,4 +1,4 @@
-# Runtime Compressed Image Downloader PoC
+# VRC Dynamic Image Compression 設計（PoC）
 
 更新日: 2026-08-22
 

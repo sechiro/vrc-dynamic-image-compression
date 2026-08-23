@@ -1,4 +1,4 @@
-# DR Runtime Compressed Image Downloader
+# VRC Dynamic Image Compression
 
 Runtime GPU block compression (BC1 / BC7 / ASTC 4x4) for images loaded with `VRCImageDownloader` in VRChat worlds (UdonSharp). Downloads stay uncompressed only while encoding; the Material receives the compressed texture, cutting VRAM to 1/8 (BC1) or 1/4 (BC7 / ASTC) of the original. Verified on Windows (D3D11), Quest (GLES3) and iOS (Metal). Includes a poster display demo scene. License: MIT.
 
@@ -47,7 +47,7 @@ VRChat側のURL制限、download size上限、rate limitなどは通常の`VRCIm
 
 このリポジトリのフォルダをそのままUnityプロジェクトの `Assets/` 配下へ置く（例: `Assets/vrc-dynamic-image-compression/`）。`.meta` を含めて配置し、Unityのcompile完了後にConsoleを絞り込まずに確認する。`Scripts/` 内の `.asset` はUdonSharp ProgramAssetであり必須である。
 
-デモは `Scenes/PosterGimmickDemo.unity`（ポスター掲示ギミック。[docs/poster-display-gimmick.md](docs/poster-display-gimmick.md)）を参照する。デモSceneの `Poster Url` と blueprint ID は空にしてあるので、各自のURL（VRChatの画像読み込み許可ドメイン上のPNG / JPEG）を設定し、新規worldとしてBuild & Publishする。動作確認用のサンプル画像として `https://sechiro.github.io/vrc-posters/posters/hatago_1448x2048.png`（1448 x 2048、RGB PNG、GitHub Pages = 許可ドメイン）をLarge / Smallの両方に設定できる。
+デモは `Scenes/PosterGimmickDemo.unity`（ポスター掲示ギミック。[docs/poster-display-gimmick.md](docs/poster-display-gimmick.md)）を参照する。デモSceneの `Poster Url` にはサンプル画像 `https://sechiro.github.io/vrc-posters/posters/hatago_1448x2048.png`（1448 x 2048、RGB PNG、GitHub Pages = VRChatの許可ドメイン）を設定してある。自分の画像に差し替える場合は許可ドメイン上のPNG / JPEGを指定する。blueprint IDは空なので、新規worldとしてBuild & Publishする。
 
 1. 次のPrefabをSceneへ1つ配置する。
 
