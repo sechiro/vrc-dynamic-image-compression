@@ -47,7 +47,7 @@ VRChat側のURL制限、download size上限、rate limitなどは通常の`VRCIm
 
 このリポジトリのフォルダをそのままUnityプロジェクトの `Assets/` 配下へ置く（例: `Assets/vrc-dynamic-image-compression/`）。`.meta` を含めて配置し、Unityのcompile完了後にConsoleを絞り込まずに確認する。`Scripts/` 内の `.asset` はUdonSharp ProgramAssetであり必須である。
 
-デモは `Scenes/PosterGimmickDemo.unity`（ポスター掲示ギミック。[docs/poster-display-gimmick.md](docs/poster-display-gimmick.md)）を参照する。デモSceneの `Poster Url` と blueprint ID は空にしてあるので、各自のURL（VRChatの画像読み込み許可ドメイン上のPNG / JPEG）を設定し、新規worldとしてBuild & Publishする。
+デモは `Scenes/PosterGimmickDemo.unity`（ポスター掲示ギミック。[docs/poster-display-gimmick.md](docs/poster-display-gimmick.md)）を参照する。デモSceneの `Poster Url` と blueprint ID は空にしてあるので、各自のURL（VRChatの画像読み込み許可ドメイン上のPNG / JPEG）を設定し、新規worldとしてBuild & Publishする。動作確認用のサンプル画像として `https://sechiro.github.io/vrc-posters/posters/hatago_1448x2048.png`（1448 x 2048、RGB PNG、GitHub Pages = 許可ドメイン）をLarge / Smallの両方に設定できる。
 
 1. 次のPrefabをSceneへ1つ配置する。
 
