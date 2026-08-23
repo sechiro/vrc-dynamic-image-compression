@@ -82,10 +82,15 @@ public class PosterDisplayDebugPanel : UdonSharpBehaviour
             {
                 _lastCompletedCount = completed;
             }
-            else if (completed != _lastCompletedCount)
+            else if (completed > _lastCompletedCount)
             {
                 _lastCompletedCount = completed;
                 Log("  finish frame " + frameMs.ToString("F1") + "ms | " + BuildStripStats());
+            }
+            else if (completed < _lastCompletedCount)
+            {
+                // A new sequence reset the counters; do not log stale stats.
+                _lastCompletedCount = completed;
             }
         }
 

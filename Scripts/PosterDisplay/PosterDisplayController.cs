@@ -102,6 +102,14 @@ public class PosterDisplayController : UdonSharpBehaviour
         return posterUrl;
     }
 
+    /// <summary>
+    /// Replaces the URL used by the next BeginLoad. Does not start a load.
+    /// </summary>
+    public void SetPosterUrl(VRCUrl value)
+    {
+        posterUrl = value;
+    }
+
     public int GetExpectedWidth()
     {
         return expectedWidth;

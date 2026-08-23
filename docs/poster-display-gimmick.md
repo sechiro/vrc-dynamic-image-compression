@@ -25,6 +25,7 @@ Scripts/PosterDisplay/
   PosterDisplayController.cs / .asset   <- 掲示板1枚（download、Materialへ設定、サイズ検証、retry）
   PosterDisplayManager.cs / .asset      <- 複数枚を直列にロード（VRChatのrate limit対応）
   PosterDisplayDebugPanel.cs / .asset   <- 実機確認用のworld内ログパネル（legacy UI Text）
+  PosterUrlInputController.cs / .asset  <- URL入力パネル（VRCUrlInputField + Loadボタン）で掲示板を差し替え
 Prefabs/PosterDisplay/
   PF_PosterDisplay.prefab               <- Board(Quad, Unlit/Texture) + Frame(Cube) + Controller
 Materials/PosterDisplay/
@@ -159,6 +160,16 @@ Manager: loaded=2 failed=0
 - 固定strip（16,384 block、初回実機）からの推移: Large 6,038 ms → 548（アイドル平均基準）→ 490（モデル制約）→ 715 ms（mobile上限4,096）、worst strip 42.4 → 34.8 → 23.9 ms。encode時間は伸びたがhitchは消えた。
 - Questの数値は未記録（表示のみ確認）。
 
+## PosterUrlInputController（URL入力で差し替え）
+
+world内の入力パネル（`VRCUrlInputField` + Loadボタン + status）からURLを入力し、既存の掲示板（Large / Small）の画像を差し替える。
+
+- `Scripts/PosterDisplay/PosterUrlInputController.cs`。Inspector: `Url Input`（`VRCUrlInputField`）、`Status Text`、`Manager`、`Target Posters`（Large / Small）、`Initial Url`（Startで入力欄へセット。デモでは喫茶はたごのポスターURL）、`Minimum Interval Seconds`（5.5。連打防止）。
+- Loadボタンの `OnClick` → `UdonBehaviour.SendCustomEvent("OnLoadRequested")`。`OnLoadRequested` は入力URLを全対象へ `SetPosterUrl` し、`PosterDisplayManager.ReloadAll()` で直列に再ロードする（Enter確定では発火しない。ボタンのみ）。
+- Canvasはworld-space（700 x 260 px、scale 0.002 = 1.4 x 0.52 m、`x = -1.5, y = 0.55, z = 3.0`、Largeの下）。`GraphicRaycaster` と `VRCUiShape` を付けてあり、VRChat clientではレーザー / タッチで操作できる。
+- 許可ドメイン外のURLや存在しないURLは、mobileでは `Download Timeout Seconds`（45秒）後に `DownloadTimeout`、PCでは `NativeDownloadFailed` になり、statusに `failed` と理由が出る。
+- 検証（2026-08-24、Windows Editor / ClientSim）: 初期URLで2枚ロード後、入力欄を別URL（2048 x 1448 JPEG）にして `OnLoadRequested` → `ReloadAll` で Large / Small の順に再ロード、両方 `BC1 2048x1448`（サイズ不一致のwarningは想定どおり）。
+
 ## 掲示板を増やす
 
 1. `PF_PosterDisplay` をSceneへ置き、`Poster Url` と `Expected Width / Height`、`Board Width Meters` を設定する。
@@ -172,7 +183,7 @@ Manager: loaded=2 failed=0
 - ポスターの差し替えはURLを変えて `BeginLoad()`（1枚）または `ReloadAll()`（全枚）。
 - mipmapは生成しない（Facadeの制約）。遠距離ではエイリアシングが出る。
 - **配信ホストはVRChatの画像読み込み許可ドメインにする。** 公式doc（[Image Loading](https://creators.vrchat.com/worlds/udon/image-loading/)）の許可リストは `*.disbridge.com`、`dl.dropbox.com` / `dl.dropboxusercontent.com`、`*.github.io`、`images4.imagebam.com`、`i.ibb.co`、`images2.imgbox.com`、`i.imgur.com`、`i.postimg.cc`、`i.redd.it`、`pbs.twimg.com`、`*.vrcdn.cloud`、`assets.vrchat.com`、`i.ytimg.com` の13件（2026-08-23時点）。**Discord CDN（`cdn.discordapp.com` / `media.discordapp.net`）と `raw.githubusercontent.com` は含まれない。** リスト外はclientの「Allow Untrusted URLs」が有効なときだけ読み込まれ、無効なclientではerror callbackも来ずにdownloadが始まらない（Facadeは `Download Timeout Seconds`（既定45秒）で `DownloadTimeout` にする）。
-- ClientSimの `VRCImageDownloader` はHTTP redirectを追わないため、redirectしない直URLを使う。デモSceneの `Poster Url` にはサンプル画像 `https://sechiro.github.io/vrc-posters/posters/hatago_1448x2048.png`（GitHub Pages、1448 x 2048 RGB PNG）を設定してある。Large / Smallとも同じURLで、Smallはギミック側で1/2に縮小される。差し替える場合は許可ドメイン上の画像を指定する。
+- ClientSimの `VRCImageDownloader` はHTTP redirectを追わないため、redirectしない直URLを使う。デモSceneのURLは許可ドメインのGitHub Pages `https://sechiro.github.io/vrc-posters/posters/hatago_1448x2048.png`（リポジトリ `sechiro/vrc-posters`、1448 x 2048 RGB PNG。Large / Smallとも同じURLで、Smallはギミック側で1/2縮小）。元画像 `Textures/hatagoposter_A4_2K.png`（RGBA、alphaはほぼ全画素255）からUnityでalphaを落として書き出した。
 - Facadeのhandle poolは4個。掲示板は成功後もhandleを保持する（Textureの所有者）ので、同時に掲示できるのは4枚まで。5枚以上は `DRCompressedImageDownloader.prefab` のRequest Handleを増やすか、Managerを分ける。
 
 ## 動作確認
