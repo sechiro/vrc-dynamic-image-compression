@@ -184,7 +184,7 @@ MonoBehaviour:
       Data: 11|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: DRCompressedImageDownloader, Assembly-CSharp
+      Data: HatagoWorks.DynamicImageCompression.DRCompressedImageDownloader, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -998,7 +998,8 @@ MonoBehaviour:
       Data: 61|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: RuntimeAstc4x4EncoderController, Assembly-CSharp
+      Data: HatagoWorks.DynamicImageCompression.RuntimeAstc4x4EncoderController,
+        Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -1052,7 +1053,7 @@ MonoBehaviour:
       Data: 64|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: RuntimeBc7EncoderController, Assembly-CSharp
+      Data: HatagoWorks.DynamicImageCompression.RuntimeBc7EncoderController, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 

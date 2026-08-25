@@ -2,6 +2,7 @@ using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Image;
 using VRC.SDKBase;
+using HatagoWorks.DynamicImageCompression;
 
 /// <summary>
 /// Shows one poster image on a board Renderer. The image is downloaded and

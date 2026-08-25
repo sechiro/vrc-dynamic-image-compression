@@ -884,7 +884,7 @@ MonoBehaviour:
       Data: 57|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: DRCompressedImageDownloader, Assembly-CSharp
+      Data: HatagoWorks.DynamicImageCompression.DRCompressedImageDownloader, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -1205,7 +1205,7 @@ MonoBehaviour:
       Data: 78|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: DRCompressedImageDownload, Assembly-CSharp
+      Data: HatagoWorks.DynamicImageCompression.DRCompressedImageDownload, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 

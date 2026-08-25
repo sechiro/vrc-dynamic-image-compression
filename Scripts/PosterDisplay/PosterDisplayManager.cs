@@ -1,6 +1,7 @@
 using UdonSharp;
 using UnityEngine;
 using VRC.SDKBase;
+using HatagoWorks.DynamicImageCompression;
 
 /// <summary>
 /// Loads several PosterDisplayController boards one after another through a

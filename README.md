@@ -2,9 +2,24 @@
 
 Runtime GPU block compression (BC1 / BC7 / ASTC 4x4) for images loaded with `VRCImageDownloader` in VRChat worlds (UdonSharp). Downloads stay uncompressed only while encoding; the Material receives the compressed texture, cutting VRAM to 1/8 (BC1) or 1/4 (BC7 / ASTC) of the original. Verified on Windows (D3D11), Quest (GLES3) and iOS (Metal). Includes a poster display demo scene. License: MIT.
 
-更新日: 2026-08-24
+更新日: 2026-08-25
 状態: **Proof of Concept（production release前）**
 ライセンス: MIT（[LICENSE](LICENSE)）
+
+本リポジトリは**最新実装のミラー+公開ドキュメント**である。開発は社内プロジェクトで行い、実装を随時ここへ反映する。
+
+> [!IMPORTANT]
+> **2026-08-25の破壊的変更**: 全スクリプトへ C# namespace `HatagoWorks.DynamicImageCompression` を付与した。旧版から更新する場合、呼び出し側に `using HatagoWorks.DynamicImageCompression;` の追加が必要になる。
+
+2026-08-25のその他の更新:
+
+- encoderがshader parameterを`.mat`アセットへ直接書いていたのを、無効化したMeshRendererの
+  material instanceへ書く方式に変更（EditorでPlay Modeのたびに`.mat`がVCS差分になる問題の解消。
+  Prefabに配線済みで利用側の変更は不要）
+- **任意サイズのGPU縮小**を追加: Target Sizeより大きいdownloadは、ちょうど2x / 4xでなくても
+  bilinear Blit（2x以上はhalvingを挟む）でTarget Sizeへ縮小してからencodeする。
+  Target Size以下のdownloadは等倍のまま（upscaleしない）
+- encoderに`SetSourceRenderTexture(rt, treatAsSrgb)`を追加（facadeの縮小pass用の一回性source指定）
 
 `VRCImageDownloader`で取得した動的画像をGPUでblock圧縮し、完成したTextureだけをMaterialへ設定するUdonSharp向けWrapperである。
 
@@ -96,6 +111,7 @@ using UdonSharp;
 using UnityEngine;
 using VRC.SDK3.Image;
 using VRC.SDKBase;
+using HatagoWorks.DynamicImageCompression;
 
 [UdonBehaviourSyncMode(BehaviourSyncMode.None)]
 public class CompressedImageExample : UdonSharpBehaviour
@@ -530,7 +546,7 @@ Android/iOSのASTC Textureは論理寸法を原寸のまま保持するため、
 | Failure Event Name | `OnCompressedImageLoadError` | download / compression error時のevent |
 | Prefer Bc1 For Opaque Sources | ON | Windowsでalphaなしsource（RGB24 / RGB48 / RGB565）をBC1（4 bpp）にする。OFFでBC7（8 bpp） |
 | Force Bc1 Discard Alpha | OFF | Windowsでsourceの形式に関係なくBC1にし、alphaを捨てる。表示shaderがalphaを使わないcontent向け。requestごとに `SetForceBc1(bool)` で指定できる |
-| Target Width / Height | 0 / 0 | downloadした画像が両辺ともこの寸法のちょうど2倍または4倍なら、encoder shader内のbox平均でこの寸法に縮小してencodeする。0で無効。requestごとに `SetTargetSize(w, h)` で指定できる |
+| Target Width / Height | 0 / 0 | encodeターゲット寸法。ちょうど2x / 4xのdownloadはencoder shader内のbox平均で、それ以外でターゲットより大きい（両辺ともターゲット以上の）downloadはbilinear Blit（2x以上はhalvingを挟む）でこの寸法に縮小してencodeする。ターゲット以下のdownloadは等倍のまま（upscaleしない）。0で無効。requestごとに `SetTargetSize(w, h)` で指定できる |
 | Enable Bc7 Edge Padding | OFF | ExperimentalなWindows非4整列対応（BC1 / BC7共通） |
 | Allow Uncompressed Fallback | ON | compression failure時に元画像を使う |
 | Compression Timeout Seconds | 15 | encode + readbackの上限。超過時はencoderをidleへ戻し、以降のrequestを受け付けられる状態に復帰する。0で無効 |

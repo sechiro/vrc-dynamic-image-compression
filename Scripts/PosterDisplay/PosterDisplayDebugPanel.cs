@@ -2,6 +2,7 @@ using UdonSharp;
 using UnityEngine;
 using UnityEngine.UI;
 using VRC.SDKBase;
+using HatagoWorks.DynamicImageCompression;
 
 /// <summary>
 /// In-world diagnostics for device testing (Quest / iOS / PC builds where

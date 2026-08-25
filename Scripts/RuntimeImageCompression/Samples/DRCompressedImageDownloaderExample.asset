@@ -20,7 +20,7 @@ MonoBehaviour:
   compiledVersion: 2
   behaviourSyncMode: 1
   hasInteractEvent: 0
-  scriptID: 1507134613877316614
+  scriptID: -3252898592908451079
   serializationData:
     SerializedFormat: 2
     SerializedBytes: 
@@ -61,7 +61,7 @@ MonoBehaviour:
       Data: 3|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: DRCompressedImageDownloader, Assembly-CSharp
+      Data: HatagoWorks.DynamicImageCompression.DRCompressedImageDownloader, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
@@ -307,7 +307,7 @@ MonoBehaviour:
       Data: 20|System.RuntimeType, mscorlib
     - Name: 
       Entry: 1
-      Data: DRCompressedImageDownload, Assembly-CSharp
+      Data: HatagoWorks.DynamicImageCompression.DRCompressedImageDownload, Assembly-CSharp
     - Name: 
       Entry: 8
       Data: 
